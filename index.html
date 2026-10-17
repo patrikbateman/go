@@ -5,15 +5,20 @@
 <style>body{font:20px system-ui,sans-serif;margin:40px 16px;text-align:center}a{display:inline-block;padding:16px 24px;border:2px solid #0d6b7a;border-radius:8px;color:#0d6b7a;text-decoration:none;font-weight:600}</style>
 <p id="m">Opening…</p>
 <script>
-var u = decodeURIComponent(location.hash.slice(1));
-var m = document.getElementById('m');
-if (/^(tel|sms|mailto):/i.test(u)) {
-  var a = document.createElement('a');
-  a.href = u;
-  a.textContent = u.startsWith('tel') ? 'Tap to call' : u.startsWith('sms') ? 'Tap to text' : 'Tap to email';
-  m.replaceChildren(a);
-  location.replace(u);
-} else {
-  m.textContent = 'Nothing to open.';
+function go() {
+  var u = decodeURIComponent(location.hash.slice(1));
+  var m = document.getElementById('m');
+  if (/^(tel|sms|mailto):/i.test(u)) {
+    var a = document.createElement('a');
+    a.href = u;
+    a.textContent = /^tel/i.test(u) ? 'Tap to call' : /^sms/i.test(u) ? 'Tap to text' : 'Tap to email';
+    m.replaceChildren(a);
+    location.replace(u);
+  } else {
+    m.textContent = 'Nothing to open.';
+  }
 }
+go();
+window.addEventListener('hashchange', go);
+window.addEventListener('pageshow', function (e) { if (e.persisted) go(); });
 </script>
